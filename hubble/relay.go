@@ -186,11 +186,11 @@ func (k *K8sHubble) generateRelayDeployment() *appsv1.Deployment {
 												},
 												Items: []corev1.KeyToPath{
 													{
-														Key:  defaults.RelayClientSecretCertName,
+														Key:  corev1.TLSCertKey,
 														Path: "client.crt",
 													},
 													{
-														Key:  defaults.RelayClientSecretKeyName,
+														Key:  corev1.TLSPrivateKeyKey,
 														Path: "client.key",
 													},
 												},
@@ -362,8 +362,8 @@ func (k *K8sHubble) createRelayServerCertificate(ctx context.Context) error {
 	}
 
 	data := map[string][]byte{
-		defaults.RelayServerSecretCertName: cert,
-		defaults.RelayServerSecretKeyName:  key,
+		corev1.TLSCertKey:       cert,
+		corev1.TLSPrivateKeyKey: key,
 	}
 
 	_, err = k.client.CreateSecret(ctx, k.params.Namespace, k8s.NewTLSSecret(defaults.RelayServerSecretName, k.params.Namespace, data), metav1.CreateOptions{})
@@ -398,8 +398,8 @@ func (k *K8sHubble) createRelayClientCertificate(ctx context.Context) error {
 	}
 
 	data := map[string][]byte{
-		defaults.RelayClientSecretCertName: cert,
-		defaults.RelayClientSecretKeyName:  key,
+		corev1.TLSCertKey:       cert,
+		corev1.TLSPrivateKeyKey: key,
 	}
 
 	_, err = k.client.CreateSecret(ctx, k.params.Namespace, k8s.NewTLSSecret(defaults.RelayClientSecretName, k.params.Namespace, data), metav1.CreateOptions{})
